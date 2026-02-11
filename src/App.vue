@@ -1,89 +1,59 @@
-<script setup>
-import { ref } from 'vue'
-import { useToast } from 'vue-toast-notification'
-
-//foram feitos incrementos e decrementos no contador, e quando o valor é incrementado, uma notificação de sucesso é exibida.  Se o valor for decrementado para 0, uma notificação de aviso é mostrada.
-const count = ref(0)
-const toast = useToast()
-
-function increment() {
-  count.value++
-  toast.success(`Valor incrementado para ${count.value}`)
-}
-
-function decrement() {
-
-  if (count.value === 0) {
-    toast.warning('O contador já está em 0!')
-    return
-  }
-//---------------------------------------------------------------------------------------------------------------------
-  count.value--
-//   Além disso, se o valor for decrementado para menos de 5, o modal é fechado automaticamente.
-  if (count.value < 5) {
-    showModal.value = false
-  }
-  toast.info(`Valor decrementado para ${count.value}`)
-}
-
-const showModal = ref(false)
-
-function openModal() {
-  showModal.value = true
-}
-
-function closeModal() {
-  showModal.value = false
-}
-
-</script>
-
+<script setup></script>
 
 <template>
-
-
-  <router-view /> 
-  
-  <div>Count is: {{ count }}</div>
-
-  <button @click="increment">Increment</button>
-  <button @click="decrement">Decrement</button>
-
-  <!---------------------------------------------------------------------------------->
-  <button v-if="count >= 5" @click="openModal">
-    Abrir Modal
-  </button>
-
-  <div v-if="showModal" class="overlay" @click="closeModal">
-    <div class="modal" @click.stop>
-      <h2>Meu Modal</h2>
-      <p>Esse é um modal simples em Vue 3.</p>
-      <button @click="closeModal">Fechar</button>
-    </div>
+  <div id="layout">
+    <header>
+      <h1>Meu projeto</h1>
+    </header>
+    <aside>
+      <nav>
+        <router-link to="/" exact>Home</router-link>
+        <router-link to="/products">Produtos</router-link>
+        <router-link to="/contact">Contato</router-link>
+        <router-link to="/about">Sobre nós</router-link>
+      </nav>
+    </aside>
+    <main>
+      <RouterView />
+    </main>
   </div>
 </template>
 
 <style scoped>
-button {
-  padding: 8px 15px;
-  cursor: pointer;
-}
+  #layout {
+    font-family: Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
 
-/* Fundo escuro */
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+    min-height: 100vh;
+    width: 100vw;
+    display: grid;
+    grid-template-columns: 1fr 11fr;
+    grid-template-rows: auto 1fr;
 
-/* Caixa do modal */
-.modal {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  min-width: 300px;
-}
+    grid-template-areas:
+      'sidebar header'
+      'sidebar main';
+  }
+
+  header {
+    grid-area: header;
+    height: 10vh;
+  }
+
+  aside {
+    grid-area: sidebar;
+  }
+
+  aside nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  main {
+    grid-area: main;
+  }
 </style>
